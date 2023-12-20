@@ -89,10 +89,16 @@ class EmployeeController {
     }
 
     public function delete() {
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
-
+        $id = isset($_POST['id']) ? $_POST['id'] : null;
+    
+        // Debug statement
+        echo "Deleting employee with ID: $id";
+    
         $success = $this->model->softDeleteEmployee($id);
-
+    
+        // Debug statement
+        echo $success ? "Deletion successful" : "Deletion failed";
+    
         if ($success) {
             header("Location: /task_backend/index.php");
             exit();
@@ -100,7 +106,7 @@ class EmployeeController {
             // Handle deletion failure (e.g., show an error message)
         }
     }
-
+    
     private function sanitizeInput($input) {
         return htmlspecialchars(trim($input));
     }

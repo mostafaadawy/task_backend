@@ -29,7 +29,7 @@
                         <td>
                             <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=view&id=<?php echo $employee['id']; ?>" class="btn btn-info">View</a>
                             <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit&id=<?php echo $employee['id']; ?>" class="btn btn-warning">Edit</a>
-                            <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=delete&id=<?php echo $employee['id']; ?>" onclick="return confirmDelete()" class="btn btn-danger">Delete</a>
+                            <a href="#" class="btn btn-danger delete-btn" data-id="<?php echo $employee['id']; ?>">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

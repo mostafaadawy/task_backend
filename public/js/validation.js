@@ -30,7 +30,37 @@ function validateForm() {
 
   return true;
 }
+// script.js
 
-function confirmDelete() {
-  return confirm("Are you sure you want to delete this employee?");
-}
+document.addEventListener("DOMContentLoaded", function () {
+  // Select all elements with the class "delete-btn"
+  var deleteButtons = document.querySelectorAll(".delete-btn");
+
+  // Add click event listener to each delete button
+  deleteButtons.forEach(function (button) {
+    button.addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default link behavior
+
+      // Get the employee ID from the data-id attribute
+      var employeeId = button.getAttribute("data-id");
+
+      // Debugging: Log the employee ID to the console
+      console.log("Employee ID to delete:", employeeId);
+
+      // Debugging: Alert the employee ID
+      alert("Employee ID to delete: " + employeeId);
+
+      // Debugging: Log a message to the console
+      console.log("Deletion triggered but not redirected");
+
+      // Debugging: Confirm deletion
+      var confirmDelete = confirm(
+        "Are you sure you want to delete this employee?"
+      );
+      console.log("Deletion confirmed:", confirmDelete);
+
+      // Debugging: Log a message to the console
+      console.log("Deletion complete");
+    });
+  });
+});

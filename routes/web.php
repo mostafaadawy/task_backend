@@ -17,10 +17,16 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 // Build the route key based on the request method and action
 $routeKey = "{$requestMethod}:{$action}";
 
+// Debugging: Log the current route key to the console
+var_dump("Current Route Key: $routeKey");
+
 // Check if the route exists
 if (array_key_exists($routeKey, $routes)) {
     // Split the controller and action from the route definition
     list($controllerName, $methodName) = explode('@', $routes[$routeKey]);
+
+    // Debugging: Log the controller and method to the console
+    var_dump("Controller: $controllerName, Method: $methodName");
 
     // Include the necessary files
     require_once(BASE_PATH . '/controllers/' . $controllerName . '.php');
@@ -32,6 +38,9 @@ if (array_key_exists($routeKey, $routes)) {
     // Call the specified method
     $controller->$methodName();
 } else {
+    // Debugging: Log a message to the console
+    var_dump("Invalid Route. Redirecting to /task_backend/index.php");
+
     // Handle invalid route (e.g., redirect to a default page)
     header("Location: /task_backend/index.php");
     exit();
