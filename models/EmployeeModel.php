@@ -19,12 +19,12 @@ class EmployeeModel {
     }
 
     public function getAllEmployees() {
-        $result = $this->db->query("SELECT * FROM employees WHERE is_deleted = 0");
+        $result = $this->db->query("SELECT * FROM employees WHERE deleted = 0");
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     public function getEmployeeById($id) {
-        $stmt = $this->db->prepare("SELECT * FROM employees WHERE id = ? AND is_deleted = 0");
+        $stmt = $this->db->prepare("SELECT * FROM employees WHERE id = ? AND deleted = 0");
         $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -69,11 +69,20 @@ class EmployeeModel {
     }
 
     public function softDeleteEmployee($id) {
-        $stmt = $this->db->prepare("UPDATE employees SET is_deleted = 1 WHERE id = ?");
-        $stmt->bind_param('i', $id);
-        $result = $stmt->execute();
-        $stmt->close();
-        return $result;
+        try {
+            // Perform the soft delete
+            $query = "UPDATE employees SET deleted = 1 WHERE id = ?";
+            $statement = $this->db->prepare($query);
+            $statement->bind_param('i', $id);
+            $statement->execute();
+
+            // Check the number of affected rows to determine success
+            return $statement->affected_rows > 0;
+        } catch (Exception $e) {
+            // Log or handle the database error
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
     }
 
     // Check if the email is unique

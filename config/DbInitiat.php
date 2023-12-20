@@ -20,7 +20,7 @@ class DbInitiat {
                     email VARCHAR(255) NOT NULL,
                     salary DECIMAL(10, 2) NOT NULL,
                     address VARCHAR(255),
-                    is_deleted TINYINT(1) DEFAULT 0
+                    deleted TINYINT(1) DEFAULT 0
                 )";
 
                 $this->mysqli->query($createTableSQL);
