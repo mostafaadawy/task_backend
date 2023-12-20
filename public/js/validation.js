@@ -1,24 +1,36 @@
-// Add your JavaScript validations here
+// public/js/validation.js
 
 function validateForm() {
-    var name = document.forms["employeeForm"]["name"].value;
-    var email = document.forms["employeeForm"]["email"].value;
-    var salary = document.forms["employeeForm"]["salary"].value;
+  var name = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var salary = document.getElementById("salary").value;
 
-    if (name === "") {
-        alert("Name must be filled out");
-        return false;
-    }
+  // Regular expressions for validation
+  var nameRegex = /^[a-zA-Z\s]+$/;
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var salaryRegex = /^\d+(\.\d{1,2})?$/;
 
-    if (email === "") {
-        alert("Email must be filled out");
-        return false;
-    }
+  // Perform your validation logic here
+  if (!nameRegex.test(name)) {
+    alert("Invalid name format");
+    return false;
+  }
 
-    if (salary === "" || isNaN(salary)) {
-        alert("Salary must be a number");
-        return false;
-    }
+  if (!emailRegex.test(email)) {
+    alert("Invalid email format");
+    return false;
+  }
 
-    return true;
+  if (!salaryRegex.test(salary)) {
+    alert("Invalid salary format");
+    return false;
+  }
+
+  // Add more validation rules as needed
+
+  return true;
+}
+
+function confirmDelete() {
+  return confirm("Are you sure you want to delete this employee?");
 }

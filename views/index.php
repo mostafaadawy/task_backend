@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee List</title>
     <link rel="stylesheet" href="/task_backend/public/css/style.css">
+    <script src="/task_backend/public/js/validation.js"></script>
 </head>
 <body>
     <h1>Employee List</h1>
@@ -27,7 +28,7 @@
                     <td>
                         <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=view&id=<?php echo $employee['id']; ?>">View</a>
                         <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit&id=<?php echo $employee['id']; ?>">Edit</a>
-                        <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=delete&id=<?php echo $employee['id']; ?>">Delete</a>
+                        <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=delete&id=<?php echo $employee['id']; ?>" onclick="return confirmDelete()">Delete</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

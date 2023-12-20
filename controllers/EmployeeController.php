@@ -14,14 +14,12 @@ class EmployeeController {
     }
 
     public function view() {
-        // Retrieve the id parameter from the URL
         $id = isset($_GET['id']) ? $_GET['id'] : null;
 
         if ($id) {
             $employee = $this->model->getEmployeeById($id);
             require(BASE_PATH . '/views/view.php');
         } else {
-            // Handle invalid or missing id parameter (e.g., redirect to index)
             header("Location: /task_backend/index.php");
             exit();
         }
@@ -33,33 +31,32 @@ class EmployeeController {
 
     public function create() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Handle form submission for adding a new employee
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $salary = $_POST['salary'];
-            $address = $_POST['address'];
+            $name = $this->sanitizeInput($_POST['name']);
+            $email = $this->sanitizeInput($_POST['email']);
+            $salary = $this->sanitizeInput($_POST['salary']);
+            $address = $this->sanitizeInput($_POST['address']);
 
-            $employeeId = $this->model->addEmployee($name, $email, $salary, $address);
+            if ($this->isValidEmail($email) && $this->isValidSalary($salary)) {
+                $employeeId = $this->model->addEmployee($name, $email, $salary, $address);
 
-            // Redirect to view the newly created employee
-            header("Location: /task_backend/index.php?action=view&id={$employeeId}");
-            exit();
+                header("Location: /task_backend/index.php");
+                exit();
+            } else {
+                // Handle validation failure (e.g., show an error message)
+            }
         } else {
-            // Invalid request method, redirect to index
             header("Location: /task_backend/index.php");
             exit();
         }
     }
 
     public function edit() {
-        // Retrieve the id parameter from the URL
         $id = isset($_GET['id']) ? $_GET['id'] : null;
 
         if ($id) {
             $employee = $this->model->getEmployeeById($id);
             require(BASE_PATH . '/views/edit.php');
         } else {
-            // Handle invalid or missing id parameter (e.g., redirect to index)
             header("Location: /task_backend/index.php");
             exit();
         }
@@ -67,45 +64,53 @@ class EmployeeController {
 
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Handle form submission for updating an employee
-            $id = $_POST['id'];
-            $name = $_POST['name'];
-            $email = $_POST['email'];
-            $salary = $_POST['salary'];
-            $address = $_POST['address'];
+            $id = $this->sanitizeInput($_POST['id']);
+            $name = $this->sanitizeInput($_POST['name']);
+            $email = $this->sanitizeInput($_POST['email']);
+            $salary = $this->sanitizeInput($_POST['salary']);
+            $address = $this->sanitizeInput($_POST['address']);
 
-            $success = $this->model->updateEmployee($id, $name, $email, $salary, $address);
+            if ($this->isValidEmail($email) && $this->isValidSalary($salary)) {
+                $success = $this->model->updateEmployee($id, $name, $email, $salary, $address);
 
-            if ($success) {
-                // Redirect to view the updated employee
-                header("Location: /task_backend/index.php?action=view&id={$id}");
-                exit();
+                if ($success) {
+                    header("Location: /task_backend/index.php");
+                    exit();
+                } else {
+                    // Handle update failure (e.g., show an error message)
+                }
             } else {
-                // Handle update failure (e.g., show an error message)
+                // Handle validation failure (e.g., show an error message)
             }
         } else {
-            // Invalid request method, redirect to index
             header("Location: /task_backend/index.php");
             exit();
         }
     }
 
     public function delete() {
-        // Retrieve the id parameter from the URL
         $id = isset($_GET['id']) ? $_GET['id'] : null;
 
-        // Implement the logic to handle the deletion of the employee
-        // Call $this->model->softDeleteEmployee(...) with the $id
-        // Redirect to the index page or show a success message
         $success = $this->model->softDeleteEmployee($id);
 
         if ($success) {
-            // Redirect to the index page after successful deletion
             header("Location: /task_backend/index.php");
             exit();
         } else {
             // Handle deletion failure (e.g., show an error message)
         }
+    }
+
+    private function sanitizeInput($input) {
+        return htmlspecialchars(trim($input));
+    }
+
+    private function isValidEmail($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+    }
+
+    private function isValidSalary($salary) {
+        return is_numeric($salary) && $salary >= 0;
     }
 }
 ?>
