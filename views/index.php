@@ -1,10 +1,11 @@
+<!-- views/index.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../public/css/style.css">
-    <title>Employee Management</title>
+    <title>Employee List</title>
+    <link rel="stylesheet" href="/task_backend/public/css/style.css">
 </head>
 <body>
     <h1>Employee List</h1>
@@ -20,17 +21,18 @@
         <tbody>
             <?php foreach ($employees as $employee): ?>
                 <tr>
-                    <td><?= $employee['name'] ?></td>
-                    <td><?= $employee['email'] ?></td>
-                    <td><?= $employee['salary'] ?></td>
+                    <td><?php echo $employee['name']; ?></td>
+                    <td><?php echo $employee['email']; ?></td>
+                    <td><?php echo $employee['salary']; ?></td>
                     <td>
-                        <a href="view.php?id=<?= $employee['id'] ?>">View</a>
-                        <a href="edit.php?id=<?= $employee['id'] ?>">Edit</a>
-                        <a href="delete.php?id=<?= $employee['id'] ?>">Delete</a>
+                        <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=view&id=<?php echo $employee['id']; ?>">View</a>
+                        <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=edit&id=<?php echo $employee['id']; ?>">Edit</a>
+                        <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=delete&id=<?php echo $employee['id']; ?>">Delete</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
+    <a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=add">Add Employee</a>
 </body>
 </html>

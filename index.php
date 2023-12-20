@@ -2,8 +2,7 @@
 define('BASE_PATH', __DIR__);
 
 require_once(BASE_PATH . '/config/database.php');
-require_once(BASE_PATH . '/controllers/EmployeeController.php');
+require_once(BASE_PATH . '/routes/web.php');
 
-$controller = new EmployeeController();
-$controller->index();
+// Note: The routing logic is now handled in the routing.php file
 ?>
