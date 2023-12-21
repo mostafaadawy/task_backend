@@ -4,11 +4,13 @@ function validateForm() {
   var name = document.getElementById("name").value;
   var email = document.getElementById("email").value;
   var salary = document.getElementById("salary").value;
+  var address = document.getElementById("address").value;
 
   // Regular expressions for validation
   var nameRegex = /^[a-zA-Z\s]+$/;
   var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var salaryRegex = /^\d+(\.\d{1,2})?$/;
+  var addressRegex = /^[a-zA-Z\s]+$/;
 
   // Perform your validation logic here
   if (!nameRegex.test(name)) {
@@ -23,6 +25,11 @@ function validateForm() {
 
   if (!salaryRegex.test(salary)) {
     alert("Invalid salary format");
+    return false;
+  }
+
+  if (!addressRegex.test(address)) {
+    alert("Invalid Address format");
     return false;
   }
 
@@ -47,20 +54,29 @@ document.addEventListener("DOMContentLoaded", function () {
       // Debugging: Log the employee ID to the console
       console.log("Employee ID to delete:", employeeId);
 
-      // Debugging: Alert the employee ID
-      alert("Employee ID to delete: " + employeeId);
-
-      // Debugging: Log a message to the console
-      console.log("Deletion triggered but not redirected");
-
       // Debugging: Confirm deletion
       var confirmDelete = confirm(
         "Are you sure you want to delete this employee?"
       );
-      console.log("Deletion confirmed:", confirmDelete);
 
-      // Debugging: Log a message to the console
-      console.log("Deletion complete");
+      if (confirmDelete) {
+        // Make a POST request to the delete route
+        fetch(`${BASE_URL}/index.php?action=delete&id=${employeeId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: "employeeId=" + employeeId,
+        })
+          .catch((error) => console.error("Error:", error))
+          .finally(() => {
+            // Reload the page after the POST request is complete
+            location.reload();
+          });
+      } else {
+        // Debugging: Log a message to the console if deletion is canceled
+        console.log("Deletion canceled");
+      }
     });
   });
 });

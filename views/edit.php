@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Employee</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="/task_backend/public/js/validation.js"></script>
+    <link rel="stylesheet" href="<?php echo BASE_URL.'/public/css/bootstrapOfline.css'; ?>">
+    <script src="<?php echo BASE_URL.'/public/js/validation.js';?>"></script>
 </head>
 <body class="bg-light">
     <div class="container mt-5">
         <h1 class="mb-4">Edit Employee</h1>
+        <?php if(isset($status)){echo "error";}?>
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>?action=update" method="post">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($employee['id']); ?>">
 

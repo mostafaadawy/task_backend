@@ -1,4 +1,8 @@
 <?php
+// Include the necessary files
+require_once(BASE_PATH . '/controllers/EmployeeController.php');
+require_once(BASE_PATH . '/models/EmployeeModel.php');
+
 // Define routes with controller, action, and HTTP method
 $routes = array(
     'GET:index'  => 'EmployeeController@index',
@@ -18,7 +22,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 $routeKey = "{$requestMethod}:{$action}";
 
 // Debugging: Log the current route key to the console
-var_dump("Current Route Key: $routeKey");
+// var_dump("Current Route Key: $routeKey");
 
 // Check if the route exists
 if (array_key_exists($routeKey, $routes)) {
@@ -26,11 +30,7 @@ if (array_key_exists($routeKey, $routes)) {
     list($controllerName, $methodName) = explode('@', $routes[$routeKey]);
 
     // Debugging: Log the controller and method to the console
-    var_dump("Controller: $controllerName, Method: $methodName");
-
-    // Include the necessary files
-    require_once(BASE_PATH . '/controllers/' . $controllerName . '.php');
-    require_once(BASE_PATH . '/models/EmployeeModel.php');
+    // var_dump("Controller: $controllerName, Method: $methodName");
 
     // Instantiate the controller
     $controller = new $controllerName();
@@ -39,10 +39,10 @@ if (array_key_exists($routeKey, $routes)) {
     $controller->$methodName();
 } else {
     // Debugging: Log a message to the console
-    var_dump("Invalid Route. Redirecting to /task_backend/index.php");
+    // var_dump("Invalid Route. Redirecting to BASE_URL/index.php");
 
     // Handle invalid route (e.g., redirect to a default page)
-    header("Location: /task_backend/index.php");
+    header("Location: ".BASE_URL."/index.php");
     exit();
 }
 ?>

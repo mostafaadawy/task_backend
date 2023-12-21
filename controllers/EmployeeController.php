@@ -3,7 +3,7 @@ require_once(BASE_PATH . '/models/EmployeeModel.php');
 
 class EmployeeController {
     private $model;
-
+    private $status;
     public function __construct() {
         $this->model = new EmployeeModel();
     }
@@ -20,7 +20,7 @@ class EmployeeController {
             $employee = $this->model->getEmployeeById($id);
             require(BASE_PATH . '/views/view.php');
         } else {
-            header("Location: /task_backend/index.php");
+            header("Location: ".BASE_URL."/index.php");
             exit();
         }
     }
@@ -35,17 +35,16 @@ class EmployeeController {
             $email = $this->sanitizeInput($_POST['email']);
             $salary = $this->sanitizeInput($_POST['salary']);
             $address = $this->sanitizeInput($_POST['address']);
-
             if ($this->isValidEmail($email) && $this->isValidSalary($salary)) {
                 $employeeId = $this->model->addEmployee($name, $email, $salary, $address);
 
-                header("Location: /task_backend/index.php");
+                header("Location: ".BASE_URL."/index.php");
                 exit();
             } else {
                 // Handle validation failure (e.g., show an error message)
             }
         } else {
-            header("Location: /task_backend/index.php");
+            header("Location: ".BASE_URL."/index.php");
             exit();
         }
     }
@@ -57,13 +56,14 @@ class EmployeeController {
             $employee = $this->model->getEmployeeById($id);
             require(BASE_PATH . '/views/edit.php');
         } else {
-            header("Location: /task_backend/index.php");
+            header("Location: ".BASE_URL."/index.php");
             exit();
         }
     }
 
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            var_dump($_POST['address']);
             $id = $this->sanitizeInput($_POST['id']);
             $name = $this->sanitizeInput($_POST['name']);
             $email = $this->sanitizeInput($_POST['email']);
@@ -74,37 +74,46 @@ class EmployeeController {
                 $success = $this->model->updateEmployee($id, $name, $email, $salary, $address);
 
                 if ($success) {
-                    header("Location: /task_backend/index.php");
+                    header("Location: ".BASE_URL."/index.php");
                     exit();
                 } else {
                     // Handle update failure (e.g., show an error message)
+                    $this->status = ["Failed","Cant Update to DB"];
+                    header("Location: ".BASE_URL."/index.php?action=edit&id=$id");
+                    exit();
                 }
             } else {
                 // Handle validation failure (e.g., show an error message)
             }
         } else {
-            header("Location: /task_backend/index.php");
+            header("Location: ".BASE_URL."/index.php");
             exit();
         }
     }
 
     public function delete() {
-        $id = isset($_POST['id']) ? $_POST['id'] : null;
-    
-        // Debug statement
-        echo "Deleting employee with ID: $id";
-    
-        $success = $this->model->softDeleteEmployee($id);
-    
-        // Debug statement
-        echo $success ? "Deletion successful" : "Deletion failed";
-    
-        if ($success) {
-            header("Location: /task_backend/index.php");
-            exit();
-        } else {
-            // Handle deletion failure (e.g., show an error message)
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Assuming you have an EmployeeModel with a softDeleteEmployee method
+            $employeeModel = new EmployeeModel();
+
+            // Get the employee ID from the POST data
+            $employeeId = isset($_POST['employeeId']) ? $_POST['employeeId'] : null;
+
+            if ($employeeId !== null) {
+                // Perform the soft delete
+                $success = $employeeModel->softDeleteEmployee($employeeId);
+
+                // Return a JSON response
+                header('Content-Type: application/json');
+                // echo json_encode(['success' => $success]);
+                exit();
+            }
         }
+
+        // Handle invalid or non-POST requests
+        header('Content-Type: application/json');
+        // echo json_encode(['error' => 'Invalid request']);
+        exit();
     }
     
     private function sanitizeInput($input) {

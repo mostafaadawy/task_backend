@@ -25,9 +25,9 @@ class DbInitiat {
 
                 $this->mysqli->query($createTableSQL);
 
-                echo 'Table created successfully!';
+                // echo 'Table created successfully!';
             } else {
-                echo 'Table already exists.';
+                // echo 'Table already exists.';
             }
         } catch (Exception $e) {
             echo 'Error: ' . $e->getMessage();
