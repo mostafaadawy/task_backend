@@ -11,6 +11,7 @@
 <body class="bg-light">
     <div class="container mt-5">
         <h1 class="mb-4">Employee List</h1>
+        <input type="hidden", id="url", value="<?php echo BASE_URL;?>">
         <table class="table">
             <thead>
                 <tr>

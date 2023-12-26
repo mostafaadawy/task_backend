@@ -1,48 +1,61 @@
 // public/js/validation.js
-
 function validateForm() {
+  // Your validation logic here
   var name = document.getElementById("name").value;
   var email = document.getElementById("email").value;
   var salary = document.getElementById("salary").value;
   var address = document.getElementById("address").value;
 
-  // Regular expressions for validation
-  var nameRegex = /^[a-zA-Z\s]+$/;
-  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var salaryRegex = /^\d+(\.\d{1,2})?$/;
-  var addressRegex = /^[a-zA-Z\s]+$/;
+  // Reset previous error messages
+  resetErrors();
 
-  // Perform your validation logic here
-  if (!nameRegex.test(name)) {
-    alert("Invalid name format");
-    return false;
+  var isValid = true;
+
+  // Validate Name
+  if (!name.match(/^[a-zA-Z]+$/)) {
+    document.getElementById("nameError").innerText =
+      "Name should contain only alphabetic characters.";
+    isValid = false;
   }
 
-  if (!emailRegex.test(email)) {
-    alert("Invalid email format");
-    return false;
+  // Validate Email
+  // You may use a more complex email validation regex
+  if (!email.includes("@")) {
+    document.getElementById("emailError").innerText = "Invalid email format.";
+    isValid = false;
   }
 
-  if (!salaryRegex.test(salary)) {
-    alert("Invalid salary format");
-    return false;
+  // Validate Salary
+  if (!salary.match(/^\d+(\.\d+)?$/)) {
+    document.getElementById("salaryError").innerText =
+      "Salary should contain only numbers.";
+    isValid = false;
   }
 
-  if (!addressRegex.test(address)) {
-    alert("Invalid Address format");
-    return false;
+  // Validate Address
+  if (address !== "" && !address.match(/^[a-zA-Z0-9 ]+$/)) {
+    document.getElementById("addressError").innerText =
+      "Address should contain only alphabets, numbers, and spaces.";
+    isValid = false;
   }
 
-  // Add more validation rules as needed
-
-  return true;
+  return isValid;
 }
+
+function resetErrors() {
+  document.getElementById("nameError").innerText = "";
+  document.getElementById("emailError").innerText = "";
+  document.getElementById("salaryError").innerText = "";
+  document.getElementById("addressError").innerText = "";
+}
+
 // script.js
 
 document.addEventListener("DOMContentLoaded", function () {
   // Select all elements with the class "delete-btn"
   var deleteButtons = document.querySelectorAll(".delete-btn");
-
+  const BASE_URL_IN = document.getElementById("url");
+  const BASE_URL = BASE_URL_IN?.value;
   // Add click event listener to each delete button
   deleteButtons.forEach(function (button) {
     button.addEventListener("click", function (event) {
@@ -66,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-          body: "employeeId=" + employeeId,
+          body: "id=" + employeeId,
         })
           .catch((error) => console.error("Error:", error))
           .finally(() => {

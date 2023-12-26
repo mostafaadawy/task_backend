@@ -63,8 +63,7 @@ class EmployeeController {
 
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            var_dump($_POST['address']);
-            $id = $this->sanitizeInput($_POST['id']);
+            $id = $this->sanitizeInput($_GET['id']); //get not post because it is connected to url not body
             $name = $this->sanitizeInput($_POST['name']);
             $email = $this->sanitizeInput($_POST['email']);
             $salary = $this->sanitizeInput($_POST['salary']);
@@ -97,8 +96,9 @@ class EmployeeController {
             $employeeModel = new EmployeeModel();
 
             // Get the employee ID from the POST data
-            $employeeId = isset($_POST['employeeId']) ? $_POST['employeeId'] : null;
-
+            $employeeId = isset($_POST['id']) ? $_POST['id'] : null;
+            // // Get the employee ID from the GET data
+            // $employeeId = isset($_GET['id']) ? $_GET['id'] : null;
             if ($employeeId !== null) {
                 // Perform the soft delete
                 $success = $employeeModel->softDeleteEmployee($employeeId);
